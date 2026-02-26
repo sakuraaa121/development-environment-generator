@@ -277,7 +277,7 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
             commands.push('(mkdir -p my-node-app && cd my-node-app && npm init -y && npm install express)');
           }
           else if (fw === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project --package-manager npm --skip-git');
-          else if (fw === 'Next.js') commands.push('npx create-next-app@latest my-next-app');
+          else if (fw === 'Next.js') commands.push('npx create-next-app@latest my-next-app --typescript --tailwind --eslint --app --use-npm --yes');
         } else if (lang === 'go') {
           if (fw === 'Gin') {
             commands.push('(mkdir -p my-go-app && cd my-go-app && go mod init my-go-app && go get -u github.com/gin-gonic/gin)');
@@ -495,7 +495,7 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
           else if (fw === 'Next.js') commands.push('rm -rf my-next-app # Next.jsプロジェクトの削除');
         } else if (lang === 'go') {
           commands.push('rm -rf my-go-app # Goプロジェクトの削除');
-          commands.push('go clean -modcache # Goモジュールキャッシュの削除');
+          commands.push('rm -rf ~/go/pkg/mod # Goモジュールキャッシュの物理削除');
         } else if (lang === 'rust') {
           commands.push('rm -rf my_rust_app # Rustプロジェクトの削除');
         }
