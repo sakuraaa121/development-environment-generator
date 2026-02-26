@@ -33,20 +33,23 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
   };
 
   useEffect(() => {
-    // もし選択中のフレームワークが現在の選択言語たちの中に存在しない場合、リセットする
-    if (config.framework && config.framework !== 'none') {
-      let isValidFramework = false;
-      for (const lang of config.languages) {
-        if (FRAMEWORKS[lang]?.includes(config.framework)) {
-          isValidFramework = true;
-          break;
+    if (Object.keys(config.frameworks || {}).length > 0) {
+      let frameworksChanged = false;
+      const newFrameworks = { ...config.frameworks };
+      for (const [lang, fw] of Object.entries(newFrameworks)) {
+        if (!config.languages.includes(lang as Language)) {
+          delete newFrameworks[lang];
+          frameworksChanged = true;
+        } else if (fw !== 'none' && !FRAMEWORKS[lang as Language]?.includes(fw)) {
+          newFrameworks[lang] = 'none';
+          frameworksChanged = true;
         }
       }
-      if (!isValidFramework) {
-        onConfigChange({ framework: 'none' });
+      if (frameworksChanged) {
+        onConfigChange({ frameworks: newFrameworks });
       }
     }
-  }, [config.languages, config.framework, onConfigChange]);
+  }, [config.languages, config.frameworks, onConfigChange]);
 
   const toggleDatabase = (db: Database) => {
     const newDatabases = config.databases.includes(db)
@@ -194,26 +197,25 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
           </div>
 
           {/* Framework Selection (appears only if some languages are selected) */}
-          {config.languages.length > 0 && (
-            <div className="mt-4 p-4 rounded-lg border border-border bg-secondary/30 space-y-3">
-              <label className="text-sm font-semibold">{t.common.framework}</label>
-              <Select value={config.framework || 'none'} onValueChange={(value) =>
-                onConfigChange({ framework: value })
-              }>
-                <SelectTrigger className="border-border bg-background">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">{t.common.none}</SelectItem>
-                  {config.languages.flatMap(lang => FRAMEWORKS[lang])
-                    .filter((val, index, self) => val !== 'none' && self.indexOf(val) === index)
-                    .map(fw => (
-                      <SelectItem key={fw} value={fw}>{fw}</SelectItem>
+          {config.languages.length > 0 && config.languages.map(lang => (
+            FRAMEWORKS[lang]?.length > 1 && (
+              <div key={lang} className="mt-4 p-4 rounded-lg border border-border bg-secondary/30 space-y-3">
+                <label className="text-sm font-semibold">{t.common.framework} ({getLanguageLabel(lang)})</label>
+                <Select value={config.frameworks?.[lang] || 'none'} onValueChange={(value) =>
+                  onConfigChange({ frameworks: { ...config.frameworks, [lang]: value } })
+                }>
+                  <SelectTrigger className="border-border bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {FRAMEWORKS[lang].map(fw => (
+                      <SelectItem key={fw} value={fw}>{fw === 'none' ? t.common.none : fw}</SelectItem>
                     ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+                  </SelectContent>
+                </Select>
+              </div>
+            )
+          ))}
         </div>
 
         {/* Database Selection */}
@@ -246,8 +248,13 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
             {config.languages.length > 0 && (
               <p>{t.labels.languages}{config.languages.map(l => getLanguageLabel(l)).join(', ')}</p>
             )}
-            {config.framework && config.framework !== 'none' && (
-              <p>{t.labels.frameworkLabel}{config.framework}</p>
+            {Object.keys(config.frameworks || {}).length > 0 && (
+              <p>{t.labels.frameworkLabel}
+                {Object.entries(config.frameworks)
+                  .filter(([_, fw]) => fw !== 'none')
+                  .map(([lang, fw]) => `${fw} (${getLanguageLabel(lang as Language)})`)
+                  .join(', ') || t.common.none}
+              </p>
             )}
             {config.databases.length > 0 && (
               <p>{t.labels.databases}{config.databases.map(d => getDatabaseLabel(d)).join(', ')}</p>

@@ -21,7 +21,7 @@ export default function Home() {
     languages: [],
     databases: [],
     ssl: false,
-    framework: 'none',
+    frameworks: {},
   });
   const [activeTab, setActiveTab] = useState<'setup' | 'cleanup'>('setup');
 
