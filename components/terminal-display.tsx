@@ -25,26 +25,24 @@ export default function TerminalDisplay({ steps, cleanupSteps, activeTab, onTabC
             {t.common.selectYourEnvironment}
           </CardDescription>
         </div>
-        
+
         {/* Tab Buttons */}
         <div className="flex gap-2 border-b border-border">
           <button
             onClick={() => onTabChange('setup')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'setup'
-                ? 'border-b-2 border-accent text-accent'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
+            className={`px-4 py-2 text-sm transition-colors ${activeTab === 'setup'
+                ? 'border-b-2 border-primary text-primary font-bold'
+                : 'text-muted-foreground font-medium hover:text-foreground hover:bg-secondary/20'
+              }`}
           >
             {t.ui.setupTab}
           </button>
           <button
             onClick={() => onTabChange('cleanup')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'cleanup'
-                ? 'border-b-2 border-accent text-accent'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
+            className={`px-4 py-2 text-sm transition-colors ${activeTab === 'cleanup'
+                ? 'border-b-2 border-primary text-primary font-bold'
+                : 'text-muted-foreground font-medium hover:text-foreground hover:bg-secondary/20'
+              }`}
           >
             {t.ui.cleanupTab}
           </button>

@@ -89,7 +89,7 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
         {/* Base OS Selection */}
         <div className="space-y-3">
           <label className="text-sm font-semibold">{t.common.baseOS}</label>
-          <Select value={config.baseOS} onValueChange={(value) => 
+          <Select value={config.baseOS} onValueChange={(value) =>
             onConfigChange({ baseOS: value as OS })
           }>
             <SelectTrigger className="border-border bg-secondary/50">
@@ -107,12 +107,12 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
         {/* Docker Options */}
         <div className="space-y-4 rounded-lg border border-border bg-secondary/30 p-4">
           <h3 className="font-semibold">{t.common.containerTechnology}</h3>
-          
+
           <div className="flex items-center justify-between">
             <label className="text-sm">{t.common.docker}</label>
             <Switch
               checked={config.docker}
-              onCheckedChange={(checked) => 
+              onCheckedChange={(checked) =>
                 onConfigChange({ docker: checked })
               }
             />
@@ -122,7 +122,7 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
             <label className="text-sm">{t.common.dockerCompose}</label>
             <Switch
               checked={config.dockerCompose}
-              onCheckedChange={(checked) => 
+              onCheckedChange={(checked) =>
                 onConfigChange({ dockerCompose: checked })
               }
             />
@@ -132,7 +132,7 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
         {/* Web Server Selection */}
         <div className="space-y-3">
           <label className="text-sm font-semibold">{t.common.webServer}</label>
-          <Select value={config.webServer} onValueChange={(value) => 
+          <Select value={config.webServer} onValueChange={(value) =>
             onConfigChange({ webServer: value as WebServer })
           }>
             <SelectTrigger className="border-border bg-secondary/50">
@@ -156,7 +156,7 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
                 variant={config.languages.includes(lang) ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => toggleLanguage(lang)}
-                className={config.languages.includes(lang) ? 'bg-accent text-accent-foreground hover:bg-accent/90' : 'border-border'}
+                className={config.languages.includes(lang) ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'border-border bg-background text-muted-foreground hover:bg-secondary/50'}
               >
                 {getLanguageLabel(lang)}
               </Button>
@@ -174,7 +174,7 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
                 variant={config.databases.includes(db) ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => toggleDatabase(db)}
-                className={config.databases.includes(db) ? 'bg-accent text-accent-foreground hover:bg-accent/90' : 'border-border'}
+                className={config.databases.includes(db) ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'border-border bg-background text-muted-foreground hover:bg-secondary/50'}
               >
                 {getDatabaseLabel(db)}
               </Button>
