@@ -152,17 +152,21 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
   }
 
   // SSL/TLS setup (certbot)
-  if (config.ssl && config.webServer !== 'none' && !isMacOS) {
+  if (config.ssl && config.webServer !== 'none') {
     commands.push(`${labels.setupSSLCertbotInfo}`);
-    commands.push('sudo apt-get install -y certbot');
-    if (config.webServer === 'nginx') {
-      commands.push('sudo apt-get install -y python3-certbot-nginx');
-      commands.push('# sudo ufw allow "Nginx Full"');
-      commands.push('# sudo certbot --nginx -d example.com -d www.example.com');
-    } else if (config.webServer === 'apache') {
-      commands.push('sudo apt-get install -y python3-certbot-apache');
-      commands.push('# sudo ufw allow "Apache Full"');
-      commands.push('# sudo certbot --apache -d example.com -d www.example.com');
+    if (isMacOS) {
+      commands.push('brew install certbot');
+    } else {
+      commands.push('sudo apt-get install -y certbot');
+      if (config.webServer === 'nginx') {
+        commands.push('sudo apt-get install -y python3-certbot-nginx');
+        commands.push('# sudo ufw allow "Nginx Full"');
+        commands.push('# sudo certbot --nginx -d example.com -d www.example.com');
+      } else if (config.webServer === 'apache') {
+        commands.push('sudo apt-get install -y python3-certbot-apache');
+        commands.push('# sudo ufw allow "Apache Full"');
+        commands.push('# sudo certbot --apache -d example.com -d www.example.com');
+      }
     }
     commands.push('');
   }
@@ -471,9 +475,12 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
   }
 
   // Remove SSL/TLS (Certbot)
-  if (config.ssl && config.webServer !== 'none' && !isMacOS) {
+  if (config.ssl && config.webServer !== 'none') {
     commands.push(`${labels.uninstallSSLCertbotInfo}`);
-    if (isLinux) {
+    if (isMacOS) {
+      commands.push('brew uninstall certbot');
+      commands.push('sudo rm -rf /etc/letsencrypt');
+    } else if (isLinux) {
       commands.push('sudo apt-get purge -y certbot python3-certbot-nginx python3-certbot-apache');
       commands.push('sudo rm -rf /etc/letsencrypt');
       commands.push('sudo apt-get autoremove -y');
