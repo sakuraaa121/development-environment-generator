@@ -269,38 +269,28 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
       commands.push(`${labels.setupFrameworkInfo} (${activeFwNames})`);
       activeFrameworks.forEach(([lang, fw]) => {
         if (lang === 'python') {
-          commands.push('python3 -m venv venv');
-          commands.push('source venv/bin/activate');
-          if (fw === 'FastAPI') commands.push('pip install fastapi uvicorn');
-          else if (fw === 'Django') commands.push('pip install django');
-          else if (fw === 'Flask') commands.push('pip install flask');
+          if (fw === 'FastAPI') commands.push('(python3 -m venv venv && source venv/bin/activate && pip install fastapi uvicorn)');
+          else if (fw === 'Django') commands.push('(python3 -m venv venv && source venv/bin/activate && pip install django)');
+          else if (fw === 'Flask') commands.push('(python3 -m venv venv && source venv/bin/activate && pip install flask)');
         } else if (lang === 'nodejs') {
           if (fw === 'Express') {
-            commands.push('mkdir -p my-node-app && cd my-node-app');
-            commands.push('npm init -y');
-            commands.push('npm install express');
+            commands.push('(mkdir -p my-node-app && cd my-node-app && npm init -y && npm install express)');
           }
           else if (fw === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project');
           else if (fw === 'Next.js') commands.push('npx create-next-app@latest my-next-app');
         } else if (lang === 'go') {
           if (fw === 'Gin') {
-            commands.push('mkdir -p my-go-app && cd my-go-app');
-            commands.push('go mod init my-go-app');
-            commands.push('go get -u github.com/gin-gonic/gin');
+            commands.push('(mkdir -p my-go-app && cd my-go-app && go mod init my-go-app && go get -u github.com/gin-gonic/gin)');
           }
           else if (fw === 'Echo') {
-            commands.push('mkdir -p my-go-app && cd my-go-app');
-            commands.push('go mod init my-go-app');
-            commands.push('go get github.com/labstack/echo/v4');
+            commands.push('(mkdir -p my-go-app && cd my-go-app && go mod init my-go-app && go get github.com/labstack/echo/v4)');
           }
         } else if (lang === 'rust') {
           if (fw === 'Actix') {
-            commands.push('cargo new my_rust_app && cd my_rust_app');
-            commands.push('cargo add actix-web');
+            commands.push('(cargo new my_rust_app && cd my_rust_app && cargo add actix-web)');
           }
           else if (fw === 'Axum') {
-            commands.push('cargo new my_rust_app && cd my_rust_app');
-            commands.push('cargo add axum tokio --features tokio/full');
+            commands.push('(cargo new my_rust_app && cd my_rust_app && cargo add axum tokio --features tokio/full)');
           }
         }
       });
@@ -333,7 +323,7 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
     commands.push(`echo "${labels.goVersion}"`);
   }
 
-  return commands.filter(Boolean).join('\n');
+  return commands.filter(c => c && c !== 'undefined').join('\n');
 }
 
 function generateCleanupScript(config: Config, labels: CommandLabels): string {
@@ -518,7 +508,7 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
   // Completion message
   commands.push(`echo "${labels.cleanupCompleted}"`);
 
-  return commands.filter(Boolean).join('\n');
+  return commands.filter(c => c && c !== 'undefined').join('\n');
 }
 
 export interface StepLabels {
@@ -742,5 +732,5 @@ export function generateCommand(config: Config, labels: CommandLabels): string {
     commands.push(`echo "${labels.goVersion}"`);
   }
 
-  return commands.filter(Boolean).join('\n');
+  return commands.filter(c => c && c !== 'undefined').join('\n');
 }

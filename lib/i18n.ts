@@ -69,6 +69,8 @@ export interface Translations {
     uninstallPostgreSQL: string;
     uninstallMySQL: string;
     uninstallRedis: string;
+    uninstallSSLCertbotInfo: string;
+    uninstallFrameworkInfo: string;
     environmentInfo: string;
     osInfo: string;
     bashVersion: string;
@@ -206,6 +208,8 @@ export const translations: Record<LanguageCode, Translations> = {
       uninstallPostgreSQL: '# PostgreSQL をアンインストール',
       uninstallMySQL: '# MySQL をアンインストール',
       uninstallRedis: '# Redis をアンインストール',
+      uninstallSSLCertbotInfo: '# SSL/TLS証明書設定（Certbot）と Let\'s Encrypt フォルダの削除',
+      uninstallFrameworkInfo: '# フレームワーク関連ファイル・プロジェクトの削除',
       cleanupCompleted: '✅ 環境のクリーンアップが完了しました！',
       environmentInfo: '📝 環境情報：',
       osInfo: 'OS: $(uname -a)',
@@ -342,6 +346,8 @@ export const translations: Record<LanguageCode, Translations> = {
       uninstallPostgreSQL: '# Uninstall PostgreSQL',
       uninstallMySQL: '# Uninstall MySQL',
       uninstallRedis: '# Uninstall Redis',
+      uninstallSSLCertbotInfo: '# Uninstall SSL/TLS certificates (Certbot) and removing Let\'s Encrypt folder',
+      uninstallFrameworkInfo: '# Remove framework related files and projects',
       cleanupCompleted: '✅ Environment cleanup completed!',
       environmentInfo: '📝 Environment info:',
       osInfo: 'OS: $(uname -a)',
