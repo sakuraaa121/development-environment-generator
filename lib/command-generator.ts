@@ -269,19 +269,39 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
       commands.push(`${labels.setupFrameworkInfo} (${activeFwNames})`);
       activeFrameworks.forEach(([lang, fw]) => {
         if (lang === 'python') {
-          if (fw === 'FastAPI') commands.push('pip3 install fastapi uvicorn');
-          else if (fw === 'Django') commands.push('pip3 install django');
-          else if (fw === 'Flask') commands.push('pip3 install flask');
+          commands.push('python3 -m venv venv');
+          commands.push('source venv/bin/activate');
+          if (fw === 'FastAPI') commands.push('pip install fastapi uvicorn');
+          else if (fw === 'Django') commands.push('pip install django');
+          else if (fw === 'Flask') commands.push('pip install flask');
         } else if (lang === 'nodejs') {
-          if (fw === 'Express') commands.push('npm install express');
+          if (fw === 'Express') {
+            commands.push('mkdir -p my-node-app && cd my-node-app');
+            commands.push('npm init -y');
+            commands.push('npm install express');
+          }
           else if (fw === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project');
           else if (fw === 'Next.js') commands.push('npx create-next-app@latest my-next-app');
         } else if (lang === 'go') {
-          if (fw === 'Gin') commands.push('go get -u github.com/gin-gonic/gin');
-          else if (fw === 'Echo') commands.push('go get github.com/labstack/echo/v4');
+          if (fw === 'Gin') {
+            commands.push('mkdir -p my-go-app && cd my-go-app');
+            commands.push('go mod init my-go-app');
+            commands.push('go get -u github.com/gin-gonic/gin');
+          }
+          else if (fw === 'Echo') {
+            commands.push('mkdir -p my-go-app && cd my-go-app');
+            commands.push('go mod init my-go-app');
+            commands.push('go get github.com/labstack/echo/v4');
+          }
         } else if (lang === 'rust') {
-          if (fw === 'Actix') commands.push('cargo add actix-web');
-          else if (fw === 'Axum') commands.push('cargo add axum tokio --features tokio/full');
+          if (fw === 'Actix') {
+            commands.push('cargo new my_rust_app && cd my_rust_app');
+            commands.push('cargo add actix-web');
+          }
+          else if (fw === 'Axum') {
+            commands.push('cargo new my_rust_app && cd my_rust_app');
+            commands.push('cargo add axum tokio --features tokio/full');
+          }
         }
       });
       commands.push('');
@@ -313,7 +333,7 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
     commands.push(`echo "${labels.goVersion}"`);
   }
 
-  return commands.join('\n');
+  return commands.filter(Boolean).join('\n');
 }
 
 function generateCleanupScript(config: Config, labels: CommandLabels): string {
@@ -480,12 +500,14 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
         if (lang === 'python') {
           commands.push('rm -rf venv # 仮想環境ディレクトリの削除');
         } else if (lang === 'nodejs') {
-          if (fw === 'Express') commands.push('rm -rf node_modules package.json package-lock.json # Expressモジュールの削除');
+          if (fw === 'Express') commands.push('rm -rf my-node-app # Expressプロジェクトの削除');
           else if (fw === 'NestJS') commands.push('rm -rf my-nest-project # NestJSプロジェクトの削除');
           else if (fw === 'Next.js') commands.push('rm -rf my-next-app # Next.jsプロジェクトの削除');
         } else if (lang === 'go') {
+          commands.push('rm -rf my-go-app # Goプロジェクトの削除');
           commands.push('go clean -modcache # Goモジュールキャッシュの削除');
         } else if (lang === 'rust') {
+          commands.push('rm -rf my_rust_app # Rustプロジェクトの削除');
           commands.push('cargo clean # Cargoキャッシュの削除');
         }
       });
@@ -496,7 +518,7 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
   // Completion message
   commands.push(`echo "${labels.cleanupCompleted}"`);
 
-  return commands.join('\n');
+  return commands.filter(Boolean).join('\n');
 }
 
 export interface StepLabels {
@@ -720,5 +742,5 @@ export function generateCommand(config: Config, labels: CommandLabels): string {
     commands.push(`echo "${labels.goVersion}"`);
   }
 
-  return commands.join('\n');
+  return commands.filter(Boolean).join('\n');
 }
