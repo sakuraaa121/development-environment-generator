@@ -13,6 +13,7 @@ export interface Translations {
     framework: string;
     sslTls: string;
     configurationSummary: string;
+    aiReasoningTitle: string;
     generatedCommand: string;
     copyAndPaste: string;
     copy: string;
@@ -160,6 +161,7 @@ export const translations: Record<LanguageCode, Translations> = {
       framework: 'フレームワーク',
       sslTls: 'SSL/TLS (HTTPS)',
       configurationSummary: '設定サマリー',
+      aiReasoningTitle: 'AIからの解説',
       generatedCommand: '生成されたコマンド',
       copyAndPaste: 'ターミナルにコピペして実行してください',
       copy: 'コピー',
@@ -305,6 +307,7 @@ export const translations: Record<LanguageCode, Translations> = {
       framework: 'Framework',
       sslTls: 'SSL/TLS (HTTPS)',
       configurationSummary: 'Configuration Summary',
+      aiReasoningTitle: 'AI Explanation',
       generatedCommand: 'Generated Command',
       copyAndPaste: 'Copy and paste into your terminal',
       copy: 'Copy',

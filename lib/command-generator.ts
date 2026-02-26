@@ -12,6 +12,7 @@ export interface Config {
   databases: Database[];
   ssl: boolean;
   frameworks: Record<string, string>;
+  reasoning?: string;
 }
 
 export const FRAMEWORKS: Record<Language, string[]> = {

@@ -44,9 +44,10 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
 - ssl: true または false（セキュアな通信が要件に含まれるかどうかで判定）
 - frameworks: 選択可能な言語別に、使用が要請されたフレームワークを記載した辞書(Object)形式。該当無しや不要なら "none"。
    Pythonなら(FastAPI, Django, Flask) / Node.jsなら(Express, NestJS, Next.js) / Goなら(Gin, Echo) / Rustなら(Actix, Axum) / C/C++なら(none)
+- reasoning: ユーザーの要件に対して、なぜそのOS、Webサーバー、言語、フレームワーク、データベースを選定したのか、インフラ設計の観点からプロのエンジニアとして理由を解説した文字列。
 
 出力JSON例:
-{"os": "Ubuntu", "docker": true, "webServers": ["Nginx"], "languages": ["Node.js"], "databases": ["Redis", "PostgreSQL"], "ssl": true, "frameworks": {"nodejs": "Next.js"}}
+{"os": "Ubuntu", "docker": true, "webServers": ["Nginx"], "languages": ["Node.js"], "databases": ["Redis", "PostgreSQL"], "ssl": true, "frameworks": {"nodejs": "Next.js"}, "reasoning": "今回はスピードを重視したNext.jsによるフルスタック開発が適していると判断しました。また...（解説文）"}
 `;
 
       const response = await fetch(url, {
@@ -127,6 +128,10 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
             newConfig.frameworks[lang] = fw;
           }
         }
+      }
+
+      if (typeof parsed.reasoning === 'string') {
+        newConfig.reasoning = parsed.reasoning;
       }
 
       onSuggest(newConfig);

@@ -32,7 +32,14 @@ export default function Home() {
   const steps = generateSteps(config, t.commands, t.steps);
   const cleanupSteps = generateCleanupSteps(config, t.commands, t.steps);
 
-  const handleConfigChange = (newConfig: Partial<Config>) => {
+  // Handler for manual configuration changes via UI
+  const handleManualConfigChange = (newConfig: Partial<Config>) => {
+    // When a user manually changes a setting, clear the AI reasoning
+    setConfig(prev => ({ ...prev, ...newConfig, reasoning: undefined }));
+  };
+
+  // Handler for AI suggestions
+  const handleAiSuggest = (newConfig: Partial<Config>) => {
     setConfig(prev => ({ ...prev, ...newConfig }));
   };
 
@@ -94,8 +101,8 @@ export default function Home() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Panel - Configuration */}
           <div className="space-y-6">
-            <AiSuggestPanel onSuggest={handleConfigChange} />
-            <ConfigPanel config={config} onConfigChange={handleConfigChange} />
+            <AiSuggestPanel onSuggest={handleAiSuggest} />
+            <ConfigPanel config={config} onConfigChange={handleManualConfigChange} />
           </div>
 
           {/* Right Panel - Terminal Display */}

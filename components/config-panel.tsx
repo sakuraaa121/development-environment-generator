@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Lightbulb } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -261,6 +263,19 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
             )}
           </div>
         </div>
+
+        {/* AI Reasoning (appears only if provided by AI) */}
+        {config.reasoning && (
+          <Alert className="bg-primary/10 border-primary/20 text-foreground">
+            <Lightbulb className="h-4 w-4 text-primary" />
+            <AlertTitle className="text-sm font-semibold text-primary">
+              {t.common.aiReasoningTitle}
+            </AlertTitle>
+            <AlertDescription className="text-sm mt-2 whitespace-pre-wrap leading-relaxed opacity-90">
+              {config.reasoning}
+            </AlertDescription>
+          </Alert>
+        )}
       </CardContent>
     </Card>
   );
