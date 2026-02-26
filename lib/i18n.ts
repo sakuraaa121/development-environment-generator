@@ -109,6 +109,7 @@ export interface Translations {
     successToast: string;
     errorToastTitle: string;
     errorToastDesc: string;
+    getKeyLink: string;
   };
   steps: {
     wslStep1Title: string;
@@ -240,6 +241,7 @@ export const translations: Record<LanguageCode, Translations> = {
       successToast: 'AIからの提案を適用しました！',
       errorToastTitle: 'AIからの提案取得に失敗しました',
       errorToastDesc: 'JSONの解析、もしくはAPIの呼び出しに失敗しました。',
+      getKeyLink: 'APIキーをお持ちでない方はこちら（Google AI Studio）',
     },
     steps: {
       wslStep1Title: 'Step 1: WSL をインストール',
@@ -369,6 +371,7 @@ export const translations: Record<LanguageCode, Translations> = {
       successToast: 'AI suggestion applied successfully!',
       errorToastTitle: 'Failed to get AI suggestion',
       errorToastDesc: 'Failed to parse JSON or call the API.',
+      getKeyLink: 'Get an API Key here (Google AI Studio)',
     },
     steps: {
       wslStep1Title: 'Step 1: Install WSL',

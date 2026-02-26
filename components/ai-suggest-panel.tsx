@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/hooks/use-language';
 import type { Config, OS, WebServer, Language, Database } from '@/lib/command-generator';
@@ -146,6 +146,15 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
             onChange={(e) => setApiKey(e.target.value)}
             className="bg-background/50 border-input"
           />
+          <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-xs text-muted-foreground hover:text-primary hover:underline mt-1 ml-1"
+          >
+            {t.ai.getKeyLink}
+            <ExternalLink className="ml-1 h-3 w-3" />
+          </a>
         </div>
         <div className="space-y-2">
           <Textarea
