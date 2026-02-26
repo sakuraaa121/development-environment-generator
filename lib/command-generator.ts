@@ -276,7 +276,7 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
           if (fw === 'Express') {
             commands.push('(mkdir -p my-node-app && cd my-node-app && npm init -y && npm install express)');
           }
-          else if (fw === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project');
+          else if (fw === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project --package-manager npm --skip-git');
           else if (fw === 'Next.js') commands.push('npx create-next-app@latest my-next-app');
         } else if (lang === 'go') {
           if (fw === 'Gin') {
@@ -498,7 +498,6 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
           commands.push('go clean -modcache # Goモジュールキャッシュの削除');
         } else if (lang === 'rust') {
           commands.push('rm -rf my_rust_app # Rustプロジェクトの削除');
-          commands.push('cargo clean # Cargoキャッシュの削除');
         }
       });
       commands.push('');
