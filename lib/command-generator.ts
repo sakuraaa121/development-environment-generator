@@ -423,7 +423,7 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
 
   if (config.languages.includes('rust')) {
     commands.push(`${labels.uninstallRust}`);
-    commands.push('rustup self uninstall -y');
+    commands.push('source "$HOME/.cargo/env" && rustup self uninstall -y');
     commands.push('');
   }
 
