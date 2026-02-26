@@ -83,6 +83,13 @@ export interface Translations {
     instructions3: string;
     setupSSLCertbotInfo: string;
     setupFrameworkInfo: string;
+    rmVirtualEnv: string;
+    rmExpress: string;
+    rmNestJS: string;
+    rmNextJS: string;
+    rmGoProject: string;
+    rmGoModCache: string;
+    rmRustProject: string;
   };
   labels: {
     os: string;
@@ -223,6 +230,13 @@ export const translations: Record<LanguageCode, Translations> = {
       instructions3: '3. 実行: bash setup.sh',
       setupSSLCertbotInfo: '# SSL/TLS証明書 (Certbot) をインストール',
       setupFrameworkInfo: '# フレームワークの初期構築を実行',
+      rmVirtualEnv: '# 仮想環境ディレクトリの削除',
+      rmExpress: '# Expressプロジェクトの削除',
+      rmNestJS: '# NestJSプロジェクトの削除',
+      rmNextJS: '# Next.jsプロジェクトの削除',
+      rmGoProject: '# Goプロジェクトの削除',
+      rmGoModCache: '# Goモジュールキャッシュの物理削除',
+      rmRustProject: '# Rustプロジェクトの削除',
     },
     labels: {
       os: '• OS: ',
@@ -361,6 +375,13 @@ export const translations: Record<LanguageCode, Translations> = {
       instructions3: '3. Run: bash setup.sh',
       setupSSLCertbotInfo: '# Install SSL/TLS certificate (Certbot)',
       setupFrameworkInfo: '# Run framework initial setup',
+      rmVirtualEnv: '# Remove virtual environment directory',
+      rmExpress: '# Remove Express project',
+      rmNestJS: '# Remove NestJS project',
+      rmNextJS: '# Remove Next.js project',
+      rmGoProject: '# Remove Go project',
+      rmGoModCache: '# Remove Go module cache physically',
+      rmRustProject: '# Remove Rust project',
     },
     labels: {
       os: '• OS: ',

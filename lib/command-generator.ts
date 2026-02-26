@@ -77,6 +77,13 @@ interface CommandLabels {
   instructions3: string;
   setupSSLCertbotInfo: string;
   setupFrameworkInfo: string;
+  rmVirtualEnv: string;
+  rmExpress: string;
+  rmNestJS: string;
+  rmNextJS: string;
+  rmGoProject: string;
+  rmGoModCache: string;
+  rmRustProject: string;
 }
 
 function generateSetupScript(config: Config, labels: CommandLabels): string {
@@ -495,16 +502,16 @@ function generateCleanupScript(config: Config, labels: CommandLabels): string {
       commands.push(`${labels.uninstallFrameworkInfo}`);
       activeFrameworks.forEach(([lang, fw]) => {
         if (lang === 'python') {
-          commands.push('rm -rf venv # 仮想環境ディレクトリの削除');
+          commands.push(`rm -rf venv ${labels.rmVirtualEnv}`);
         } else if (lang === 'nodejs') {
-          if (fw === 'Express') commands.push('rm -rf my-node-app # Expressプロジェクトの削除');
-          else if (fw === 'NestJS') commands.push('rm -rf my-nest-project # NestJSプロジェクトの削除');
-          else if (fw === 'Next.js') commands.push('rm -rf my-next-app # Next.jsプロジェクトの削除');
+          if (fw === 'Express') commands.push(`rm -rf my-node-app ${labels.rmExpress}`);
+          else if (fw === 'NestJS') commands.push(`rm -rf my-nest-project ${labels.rmNestJS}`);
+          else if (fw === 'Next.js') commands.push(`rm -rf my-next-app ${labels.rmNextJS}`);
         } else if (lang === 'go') {
-          commands.push('rm -rf my-go-app # Goプロジェクトの削除');
-          commands.push('rm -rf ~/go/pkg/mod # Goモジュールキャッシュの物理削除');
+          commands.push(`rm -rf my-go-app ${labels.rmGoProject}`);
+          commands.push(`rm -rf ~/go/pkg/mod ${labels.rmGoModCache}`);
         } else if (lang === 'rust') {
-          commands.push('rm -rf my_rust_app # Rustプロジェクトの削除');
+          commands.push(`rm -rf my_rust_app ${labels.rmRustProject}`);
         }
       });
       commands.push('');
