@@ -10,6 +10,8 @@ export interface Translations {
     containerTechnology: string;
     webServer: string;
     programmingLanguages: string;
+    framework: string;
+    sslTls: string;
     configurationSummary: string;
     generatedCommand: string;
     copyAndPaste: string;
@@ -77,6 +79,8 @@ export interface Translations {
     instructions1: string;
     instructions2: string;
     instructions3: string;
+    setupSSLCertbotInfo: string;
+    setupFrameworkInfo: string;
   };
   labels: {
     os: string;
@@ -84,6 +88,8 @@ export interface Translations {
     dockerComposeEnabled: string;
     webServerLabel: string;
     languages: string;
+    frameworkLabel: string;
+    sslEnabled: string;
     databases: string;
     postgresqlEnabled: string;
     mysqlEnabled: string;
@@ -142,6 +148,8 @@ export const translations: Record<LanguageCode, Translations> = {
       containerTechnology: 'コンテナ技術',
       webServer: 'Webサーバー',
       programmingLanguages: 'プログラミング言語',
+      framework: 'フレームワーク',
+      sslTls: 'SSL/TLS (HTTPS)',
       configurationSummary: '設定サマリー',
       generatedCommand: '生成されたコマンド',
       copyAndPaste: 'ターミナルにコピペして実行してください',
@@ -209,6 +217,8 @@ export const translations: Record<LanguageCode, Translations> = {
       instructions1: '1. 「コピー」ボタンをクリックしてコマンドをコピー',
       instructions2: '2. ターミナルを開いてコマンドをペースト',
       instructions3: '3. 実行: bash setup.sh',
+      setupSSLCertbotInfo: '# SSL/TLS証明書 (Certbot) をインストール',
+      setupFrameworkInfo: '# フレームワークの初期構築を実行',
     },
     labels: {
       os: '• OS: ',
@@ -216,6 +226,8 @@ export const translations: Record<LanguageCode, Translations> = {
       dockerComposeEnabled: '• Docker Compose 有効',
       webServerLabel: '• Webサーバー: ',
       languages: '• 言語: ',
+      frameworkLabel: '• フレームワーク: ',
+      sslEnabled: '• SSL/TLS 有効',
       databases: '• データベース: ',
       postgresqlEnabled: '• PostgreSQL 有効',
       mysqlEnabled: '• MySQL 有効',
@@ -272,6 +284,8 @@ export const translations: Record<LanguageCode, Translations> = {
       containerTechnology: 'Container Technology',
       webServer: 'Web Server',
       programmingLanguages: 'Programming Languages',
+      framework: 'Framework',
+      sslTls: 'SSL/TLS (HTTPS)',
       configurationSummary: 'Configuration Summary',
       generatedCommand: 'Generated Command',
       copyAndPaste: 'Copy and paste into your terminal',
@@ -339,6 +353,8 @@ export const translations: Record<LanguageCode, Translations> = {
       instructions1: '1. Click the "Copy" button to copy all commands',
       instructions2: '2. Open your terminal and paste the commands',
       instructions3: '3. Run: bash setup.sh',
+      setupSSLCertbotInfo: '# Install SSL/TLS certificate (Certbot)',
+      setupFrameworkInfo: '# Run framework initial setup',
     },
     labels: {
       os: '• OS: ',
@@ -346,6 +362,8 @@ export const translations: Record<LanguageCode, Translations> = {
       dockerComposeEnabled: '• Docker Compose enabled',
       webServerLabel: '• Web Server: ',
       languages: '• Languages: ',
+      frameworkLabel: '• Framework: ',
+      sslEnabled: '• SSL/TLS enabled',
       databases: '• Databases: ',
       postgresqlEnabled: '• PostgreSQL enabled',
       mysqlEnabled: '• MySQL enabled',

@@ -41,9 +41,12 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
 - webServers: "Nginx", "Apache" の配列（複数可、不要なら空配列）
 - languages: "Python", "Node.js", "Go", "C/C++", "Rust" の配列（複数可、不要なら空配列）
 - databases: "PostgreSQL", "MySQL", "Redis" の配列（複数可、不要なら空配列）
+- ssl: true または false（セキュアな通信が要件に含まれるかどうかで判定）
+- framework: 選択した言語に対応する主要フレームワーク名を以下のリストから1つ。該当無しや不要なら "none"。
+   Pythonなら(FastAPI, Django, Flask) / Node.jsなら(Express, NestJS, Next.js) / Goなら(Gin, Echo) / Rustなら(Actix, Axum) / C/C++なら(none)
 
 出力JSON例:
-{"os": "Ubuntu", "docker": true, "webServers": ["Nginx"], "languages": ["Node.js"], "databases": ["Redis", "PostgreSQL"]}
+{"os": "Ubuntu", "docker": true, "webServers": ["Nginx"], "languages": ["Node.js"], "databases": ["Redis", "PostgreSQL"], "ssl": true, "framework": "Next.js"}
 `;
 
       const response = await fetch(url, {
@@ -111,6 +114,14 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
         if (parsed.databases.includes('MySQL')) mappedDatabases.push('mysql');
         if (parsed.databases.includes('Redis')) mappedDatabases.push('redis');
         newConfig.databases = mappedDatabases;
+      }
+
+      if (typeof parsed.ssl === 'boolean') {
+        newConfig.ssl = parsed.ssl;
+      }
+
+      if (typeof parsed.framework === 'string') {
+        newConfig.framework = parsed.framework;
       }
 
       onSuggest(newConfig);

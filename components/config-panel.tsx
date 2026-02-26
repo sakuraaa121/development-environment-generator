@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
-import type { Config, OS, WebServer, Language, Database } from '@/lib/command-generator';
+import { type Config, type OS, type WebServer, type Language, type Database, FRAMEWORKS } from '@/lib/command-generator';
 import { useLanguage } from '@/hooks/use-language';
 
 interface ConfigPanelProps {
@@ -30,6 +31,22 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
       : [...config.languages, lang];
     onConfigChange({ languages: newLanguages });
   };
+
+  useEffect(() => {
+    // もし選択中のフレームワークが現在の選択言語たちの中に存在しない場合、リセットする
+    if (config.framework && config.framework !== 'none') {
+      let isValidFramework = false;
+      for (const lang of config.languages) {
+        if (FRAMEWORKS[lang]?.includes(config.framework)) {
+          isValidFramework = true;
+          break;
+        }
+      }
+      if (!isValidFramework) {
+        onConfigChange({ framework: 'none' });
+      }
+    }
+  }, [config.languages, config.framework, onConfigChange]);
 
   const toggleDatabase = (db: Database) => {
     const newDatabases = config.databases.includes(db)
@@ -144,6 +161,19 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
               <SelectItem value="apache">{t.common.apache}</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* SSL/TLS Option (only when WebServer is selected) */}
+          {config.webServer !== 'none' && (
+            <div className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 p-4 mt-2">
+              <label className="text-sm font-semibold">{t.common.sslTls}</label>
+              <Switch
+                checked={config.ssl}
+                onCheckedChange={(checked) =>
+                  onConfigChange({ ssl: checked })
+                }
+              />
+            </div>
+          )}
         </div>
 
         {/* Programming Languages */}
@@ -162,6 +192,28 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
               </Button>
             ))}
           </div>
+
+          {/* Framework Selection (appears only if some languages are selected) */}
+          {config.languages.length > 0 && (
+            <div className="mt-4 p-4 rounded-lg border border-border bg-secondary/30 space-y-3">
+              <label className="text-sm font-semibold">{t.common.framework}</label>
+              <Select value={config.framework || 'none'} onValueChange={(value) =>
+                onConfigChange({ framework: value })
+              }>
+                <SelectTrigger className="border-border bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">{t.common.none}</SelectItem>
+                  {config.languages.flatMap(lang => FRAMEWORKS[lang])
+                    .filter((val, index, self) => val !== 'none' && self.indexOf(val) === index)
+                    .map(fw => (
+                      <SelectItem key={fw} value={fw}>{fw}</SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
 
         {/* Database Selection */}
@@ -190,8 +242,12 @@ export default function ConfigPanel({ config, onConfigChange }: ConfigPanelProps
             {config.docker && <p>{t.labels.dockerEnabled}</p>}
             {config.dockerCompose && <p>{t.labels.dockerComposeEnabled}</p>}
             <p>{t.labels.webServerLabel}{getWebServerLabel(config.webServer)}</p>
+            {config.ssl && <p>{t.labels.sslEnabled}</p>}
             {config.languages.length > 0 && (
               <p>{t.labels.languages}{config.languages.map(l => getLanguageLabel(l)).join(', ')}</p>
+            )}
+            {config.framework && config.framework !== 'none' && (
+              <p>{t.labels.frameworkLabel}{config.framework}</p>
             )}
             {config.databases.length > 0 && (
               <p>{t.labels.databases}{config.databases.map(d => getDatabaseLabel(d)).join(', ')}</p>

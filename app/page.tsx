@@ -20,6 +20,8 @@ export default function Home() {
     webServer: 'none',
     languages: [],
     databases: [],
+    ssl: false,
+    framework: 'none',
   });
   const [activeTab, setActiveTab] = useState<'setup' | 'cleanup'>('setup');
 

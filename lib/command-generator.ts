@@ -10,7 +10,17 @@ export interface Config {
   webServer: WebServer;
   languages: Language[];
   databases: Database[];
+  ssl: boolean;
+  framework: string;
 }
+
+export const FRAMEWORKS: Record<Language, string[]> = {
+  python: ['none', 'FastAPI', 'Django', 'Flask'],
+  nodejs: ['none', 'Express', 'NestJS', 'Next.js'],
+  go: ['none', 'Gin', 'Echo'],
+  rust: ['none', 'Actix', 'Axum'],
+  cpp: ['none'],
+};
 
 export interface Step {
   title: string;
@@ -63,6 +73,8 @@ interface CommandLabels {
   instructions1: string;
   instructions2: string;
   instructions3: string;
+  setupSSLCertbotInfo: string;
+  setupFrameworkInfo: string;
 }
 
 function generateSetupScript(config: Config, labels: CommandLabels): string {
@@ -133,6 +145,22 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
       commands.push('sudo apt-get install -y apache2');
       commands.push('sudo systemctl start apache2');
       commands.push('sudo systemctl enable apache2');
+    }
+    commands.push('');
+  }
+
+  // SSL/TLS setup (certbot)
+  if (config.ssl && config.webServer !== 'none' && !isMacOS) {
+    commands.push(`${labels.setupSSLCertbotInfo}`);
+    commands.push('sudo apt-get install -y certbot');
+    if (config.webServer === 'nginx') {
+      commands.push('sudo apt-get install -y python3-certbot-nginx');
+      commands.push('# sudo ufw allow "Nginx Full"');
+      commands.push('# sudo certbot --nginx -d example.com -d www.example.com');
+    } else if (config.webServer === 'apache') {
+      commands.push('sudo apt-get install -y python3-certbot-apache');
+      commands.push('# sudo ufw allow "Apache Full"');
+      commands.push('# sudo certbot --apache -d example.com -d www.example.com');
     }
     commands.push('');
   }
@@ -227,6 +255,30 @@ function generateSetupScript(config: Config, labels: CommandLabels): string {
       commands.push('sudo apt-get install -y redis-server');
       commands.push('sudo systemctl start redis-server');
       commands.push('sudo systemctl enable redis-server');
+    }
+    commands.push('');
+  }
+
+  // Framework setup
+  if (config.framework && config.framework !== 'none') {
+    commands.push(`${labels.setupFrameworkInfo} (${config.framework})`);
+    if (config.languages.includes('python')) {
+      if (config.framework === 'FastAPI') commands.push('pip3 install fastapi uvicorn');
+      else if (config.framework === 'Django') commands.push('pip3 install django');
+      else if (config.framework === 'Flask') commands.push('pip3 install flask');
+    }
+    if (config.languages.includes('nodejs')) {
+      if (config.framework === 'Express') commands.push('npm install express');
+      else if (config.framework === 'NestJS') commands.push('npx @nestjs/cli new my-nest-project');
+      else if (config.framework === 'Next.js') commands.push('npx create-next-app@latest my-next-app');
+    }
+    if (config.languages.includes('go')) {
+      if (config.framework === 'Gin') commands.push('go get -u github.com/gin-gonic/gin');
+      else if (config.framework === 'Echo') commands.push('go get github.com/labstack/echo/v4');
+    }
+    if (config.languages.includes('rust')) {
+      if (config.framework === 'Actix') commands.push('cargo add actix-web');
+      else if (config.framework === 'Axum') commands.push('cargo add axum tokio --features tokio/full');
     }
     commands.push('');
   }
