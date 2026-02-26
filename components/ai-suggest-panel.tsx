@@ -15,7 +15,7 @@ interface AiSuggestPanelProps {
 }
 
 export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [apiKey, setApiKey] = useState('');
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +34,7 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
 
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      const langInstruction = language === 'en' ? 'English' : '日本語';
       const systemInstruction = `あなたは優秀なインフラエンジニアです。ユーザーの作りたいアプリの要件を聞き、以下の指定された選択肢の中から最適な環境構成を **JSONフォーマットのみ** で返答してください。マークダウンのコードブロック(\`\`\`json ... \`\`\`)は付けず、純粋なJSON文字列だけを返してください。
 選択可能な値：
 - os: "WSL (Windows)", "macOS", "Ubuntu", "VirtualBox" のいずれか1つ
@@ -44,7 +45,7 @@ export default function AiSuggestPanel({ onSuggest }: AiSuggestPanelProps) {
 - ssl: true または false（セキュアな通信が要件に含まれるかどうかで判定）
 - frameworks: 選択可能な言語別に、使用が要請されたフレームワークを記載した辞書(Object)形式。該当無しや不要なら "none"。
    Pythonなら(FastAPI, Django, Flask) / Node.jsなら(Express, NestJS, Next.js) / Goなら(Gin, Echo) / Rustなら(Actix, Axum) / C/C++なら(none)
-- reasoning: ユーザーの要件に対して、なぜそのOS、Webサーバー、言語、フレームワーク、データベースを選定したのか、インフラ設計の観点からプロのエンジニアとして理由を解説した文字列。
+- reasoning: ユーザーの要件に対して、なぜそのOS、Webサーバー、言語、フレームワーク、データベースを選定したのか、インフラ設計の観点からプロのエンジニアとして理由を解説した文字列。必ず「${langInstruction}」で出力してください。
 
 出力JSON例:
 {"os": "Ubuntu", "docker": true, "webServers": ["Nginx"], "languages": ["Node.js"], "databases": ["Redis", "PostgreSQL"], "ssl": true, "frameworks": {"nodejs": "Next.js"}, "reasoning": "今回はスピードを重視したNext.jsによるフルスタック開発が適していると判断しました。また...（解説文）"}
